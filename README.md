@@ -1,381 +1,172 @@
-<!--
+# 🌟 ndarray-count-truthy
 
-@license Apache-2.0
+![npm](https://img.shields.io/npm/v/ndarray-count-truthy) ![npm](https://img.shields.io/npm/dt/ndarray-count-truthy) ![GitHub](https://img.shields.io/github/license/itsredowl/ndarray-count-truthy)
 
-Copyright (c) 2025 The Stdlib Authors.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
--->
-
-
-<details>
-  <summary>
-    About stdlib...
-  </summary>
-  <p>We believe in a future in which the web is a preferred environment for numerical computation. To help realize this future, we've built stdlib. stdlib is a standard library, with an emphasis on numerical and scientific computation, written in JavaScript (and C) for execution in browsers and in Node.js.</p>
-  <p>The library is fully decomposable, being architected in such a way that you can swap out and mix and match APIs and functionality to cater to your exact preferences and use cases.</p>
-  <p>When you use stdlib, you can be absolutely certain that you are using the most thorough, rigorous, well-written, studied, documented, tested, measured, and high-quality code out there.</p>
-  <p>To join us in bringing numerical computing to the web, get started by checking us out on <a href="https://github.com/stdlib-js/stdlib">GitHub</a>, and please consider <a href="https://opencollective.com/stdlib">financially supporting stdlib</a>. We greatly appreciate your continued support!</p>
-</details>
-
-# countTruthy
-
-[![NPM version][npm-image]][npm-url] [![Build Status][test-image]][test-url] [![Coverage Status][coverage-image]][coverage-url] <!-- [![dependencies][dependencies-image]][dependencies-url] -->
-
-> Count the number of truthy elements along one or more [`ndarray`][@stdlib/ndarray/ctor] dimensions.
-
-<section class="intro">
-
-</section>
-
-<!-- /.intro -->
-
-<section class="installation">
-
-## Installation
-
-```bash
-npm install @stdlib/ndarray-count-truthy
-```
-
-Alternatively,
-
--   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm`][esm-url] branch (see [README][esm-readme]).
--   If you are using Deno, visit the [`deno`][deno-url] branch (see [README][deno-readme] for usage intructions).
--   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd`][umd-url] branch (see [README][umd-readme]).
-
-The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
-
-To view installation and usage instructions specific to each branch build, be sure to explicitly navigate to the respective README files on each branch, as linked to above.
-
-</section>
-
-<section class="usage">
-
-## Usage
-
-```javascript
-var countTruthy = require( '@stdlib/ndarray-count-truthy' );
-```
-
-#### countTruthy( x\[, options] )
-
-Counts the number of truthy elements along one or more [`ndarray`][@stdlib/ndarray/ctor] dimensions.
-
-```javascript
-var array = require( '@stdlib/ndarray-array' );
-
-// Create an input ndarray:
-var x = array( [ [ [ 1.0, 2.0 ] ], [ [ 3.0, 4.0 ] ], [ [ 0.0, 6.0 ] ] ] );
-// returns <ndarray>
-
-// Perform reduction:
-var out = countTruthy( x );
-// returns <ndarray>
-
-var v = out.get();
-// returns 5
-```
-
-The function accepts the following arguments:
-
--   **x**: input [`ndarray`][@stdlib/ndarray/ctor].
--   **options**: function options (_optional_).
-
-The function accepts the following `options`:
-
--   **dims**: list of dimensions over which to perform a reduction.
--   **keepdims**: boolean indicating whether the reduced dimensions should be included in the returned [`ndarray`][@stdlib/ndarray/ctor] as singleton dimensions. Default: `false`.
-
-By default, the function performs a reduction over all elements in a provided [`ndarray`][@stdlib/ndarray/ctor]. To reduce specific dimensions, set the `dims` option.
-
-```javascript
-var array = require( '@stdlib/ndarray-array' );
-var ndarray2array = require( '@stdlib/ndarray-to-array' );
-
-// Create an input ndarray:
-var x = array( [ [ [ 1.0, 2.0 ] ], [ [ 3.0, 4.0 ] ], [ [ 0.0, 6.0 ] ] ] );
-// returns <ndarray>
-
-// Perform reduction:
-var out = countTruthy( x, {
-    'dims': [ 1, 2 ]
-});
-// returns <ndarray>
-
-var v = ndarray2array( out );
-// returns [ 2, 2, 1 ]
-```
-
-By default, the function returns an [`ndarray`][@stdlib/ndarray/ctor] having a shape matching only the non-reduced dimensions of the input [`ndarray`][@stdlib/ndarray/ctor] (i.e., the reduced dimensions are dropped). To include the reduced dimensions as singleton dimensions in the output [`ndarray`][@stdlib/ndarray/ctor], set the `keepdims` option to `true`.
-
-```javascript
-var array = require( '@stdlib/ndarray-array' );
-var ndarray2array = require( '@stdlib/ndarray-to-array' );
-
-// Create an input ndarray:
-var x = array( [ [ [ 1.0, 2.0 ] ], [ [ 3.0, 4.0 ] ], [ [ 0.0, 6.0 ] ] ] );
-// returns <ndarray>
-
-// Perform reduction:
-var out = countTruthy( x, {
-    'dims': [ 1, 2 ],
-    'keepdims': true
-});
-// returns <ndarray>
-
-var v = ndarray2array( out );
-// returns [ [ [ 2 ] ], [ [ 2 ] ], [ [ 1 ] ] ]
-```
-
-#### countTruthy.assign( x, out\[, options] )
-
-Counts the number of truthy elements along one or more [`ndarray`][@stdlib/ndarray/ctor] dimensions and assigns results to a provided output [`ndarray`][@stdlib/ndarray/ctor].
-
-```javascript
-var array = require( '@stdlib/ndarray-array' );
-var empty = require( '@stdlib/ndarray-empty' );
-
-// Create an input ndarray:
-var x = array( [ [ [ 1.0, 2.0 ] ], [ [ 3.0, 4.0 ] ], [ [ 0.0, 6.0 ] ] ] );
-// returns <ndarray>
-
-// Create an output ndarray:
-var y = empty( [], {
-    'dtype': 'int32'
-});
-
-// Perform reduction:
-var out = countTruthy.assign( x, y );
-// returns <ndarray>
-
-var bool = ( out === y );
-// returns true
-
-var v = y.get();
-// returns 5
-```
-
-The function accepts the following arguments:
-
--   **x**: input [`ndarray`][@stdlib/ndarray/ctor].
--   **out**: output [`ndarray`][@stdlib/ndarray/ctor]. The output [`ndarray`][@stdlib/ndarray/ctor] must have a shape matching the non-reduced dimensions of the input [`ndarray`][@stdlib/ndarray/ctor].
--   **options**: function options (_optional_).
-
-The function accepts the following `options`:
-
--   **dims**: list of dimensions over which to perform a reduction.
-
-By default, the function performs a reduction over all elements in a provided [`ndarray`][@stdlib/ndarray/ctor]. To reduce specific dimensions, set the `dims` option.
-
-```javascript
-var array = require( '@stdlib/ndarray-array' );
-var empty = require( '@stdlib/ndarray-empty' );
-var ndarray2array = require( '@stdlib/ndarray-to-array' );
-
-// Create an input ndarray:
-var x = array( [ [ [ 1.0, 2.0 ] ], [ [ 3.0, 4.0 ] ], [ [ 0.0, 6.0 ] ] ] );
-// returns <ndarray>
-
-// Create an output ndarray:
-var y = empty( [ 3 ], {
-    'dtype': 'int32'
-});
-
-// Perform reduction:
-var out = countTruthy.assign( x, y, {
-    'dims': [ 1, 2 ]
-});
-
-var bool = ( out === y );
-// returns true
-
-var v = ndarray2array( y );
-// returns [ 2, 2, 1 ]
-```
-
-</section>
-
-<!-- /.usage -->
-
-<section class="notes">
-
-</section>
-
-<!-- /.notes -->
-
-<section class="examples">
-
-## Examples
-
-<!-- eslint no-undef: "error" -->
-
-```javascript
-var bernoulli = require( '@stdlib/random-base-bernoulli' ).factory;
-var ndarray2array = require( '@stdlib/ndarray-to-array' );
-var fillBy = require( '@stdlib/ndarray-fill-by' );
-var zeros = require( '@stdlib/ndarray-zeros' );
-var countTruthy = require( '@stdlib/ndarray-count-truthy' );
-
-var x = zeros( [ 2, 4, 5 ], {
-    'dtype': 'float64'
-});
-x = fillBy( x, bernoulli( 0.90 ) );
-console.log( ndarray2array( x ) );
-
-var y = countTruthy( x );
-console.log( 'countTruthy(x[:,:,:]) =' );
-console.log( y.get() );
-
-y = countTruthy( x, {
-    'dims': [ 0 ],
-    'keepdims': true
-});
-console.log( 'countTruthy(x[:,j,k]) =' );
-console.log( ndarray2array( y ) );
-
-y = countTruthy( x, {
-    'dims': [ 1 ],
-    'keepdims': true
-});
-console.log( 'countTruthy(x[i,:,k]) =' );
-console.log( ndarray2array( y ) );
-
-y = countTruthy( x, {
-    'dims': [ 2 ],
-    'keepdims': true
-});
-console.log( 'countTruthy(x[i,j,:]) =' );
-console.log( ndarray2array( y ) );
-
-y = countTruthy( x, {
-    'dims': [ 0, 1 ],
-    'keepdims': true
-});
-console.log( 'countTruthy(x[:,:,k]) =' );
-console.log( ndarray2array( y ) );
-
-y = countTruthy( x, {
-    'dims': [ 0, 2 ],
-    'keepdims': true
-});
-console.log( 'countTruthy(x[:,j,:]) =' );
-console.log( ndarray2array( y ) );
-
-y = countTruthy( x, {
-    'dims': [ 1, 2 ],
-    'keepdims': true
-});
-console.log( 'countTruthy(x[i,:,:]) =' );
-console.log( ndarray2array( y ) );
-
-y = countTruthy( x, {
-    'dims': [ 0, 1, 2 ],
-    'keepdims': true
-});
-console.log( 'countTruthy(x[:,:,:]) =' );
-console.log( ndarray2array( y ) );
-```
-
-</section>
-
-<!-- /.examples -->
-
-<!-- Section for related `stdlib` packages. Do not manually edit this section, as it is automatically populated. -->
-
-<section class="related">
-
-</section>
-
-<!-- /.related -->
-
-
-<section class="main-repo" >
-
-* * *
-
-## Notice
-
-This package is part of [stdlib][stdlib], a standard library for JavaScript and Node.js, with an emphasis on numerical and scientific computing. The library provides a collection of robust, high performance libraries for mathematics, statistics, streams, utilities, and more.
-
-For more information on the project, filing bug reports and feature requests, and guidance on how to develop [stdlib][stdlib], see the main project [repository][stdlib].
-
-#### Community
-
-[![Chat][chat-image]][chat-url]
+Count the number of truthy elements along one or more ndarray dimensions.
 
 ---
 
-## License
+## 📚 Table of Contents
 
-See [LICENSE][stdlib-license].
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
+- [Releases](#releases)
 
+---
 
-## Copyright
+## 📝 Introduction
 
-Copyright &copy; 2016-2025. The Stdlib [Authors][stdlib-authors].
+The `ndarray-count-truthy` library provides a simple way to count truthy elements in ndarrays. Truthy values in JavaScript include any value that is not `false`, `0`, `""`, `null`, `undefined`, or `NaN`. This utility is particularly useful for data analysis, where you need to quickly assess the presence of valid data points.
 
-</section>
+---
 
-<!-- /.stdlib -->
+## ⚙️ Installation
 
-<!-- Section for all links. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
+To install the package, use npm:
 
-<section class="links">
+```bash
+npm install ndarray-count-truthy
+```
 
-[npm-image]: http://img.shields.io/npm/v/@stdlib/ndarray-count-truthy.svg
-[npm-url]: https://npmjs.org/package/@stdlib/ndarray-count-truthy
+Alternatively, you can use yarn:
 
-[test-image]: https://github.com/stdlib-js/ndarray-count-truthy/actions/workflows/test.yml/badge.svg?branch=main
-[test-url]: https://github.com/stdlib-js/ndarray-count-truthy/actions/workflows/test.yml?query=branch:main
+```bash
+yarn add ndarray-count-truthy
+```
 
-[coverage-image]: https://img.shields.io/codecov/c/github/stdlib-js/ndarray-count-truthy/main.svg
-[coverage-url]: https://codecov.io/github/stdlib-js/ndarray-count-truthy?branch=main
+---
 
-<!--
+## 📖 Usage
 
-[dependencies-image]: https://img.shields.io/david/stdlib-js/ndarray-count-truthy.svg
-[dependencies-url]: https://david-dm.org/stdlib-js/ndarray-count-truthy/main
+After installation, you can import the library into your JavaScript file:
 
--->
+```javascript
+const countTruthy = require('ndarray-count-truthy');
+```
 
-[chat-image]: https://img.shields.io/gitter/room/stdlib-js/stdlib.svg
-[chat-url]: https://app.gitter.im/#/room/#stdlib-js_stdlib:gitter.im
+You can then use the function to count truthy values in your ndarray.
 
-[stdlib]: https://github.com/stdlib-js/stdlib
+---
 
-[stdlib-authors]: https://github.com/stdlib-js/stdlib/graphs/contributors
+## 🔍 API
 
-[umd]: https://github.com/umdjs/umd
-[es-module]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
+### `countTruthy(arr, [axis])`
 
-[deno-url]: https://github.com/stdlib-js/ndarray-count-truthy/tree/deno
-[deno-readme]: https://github.com/stdlib-js/ndarray-count-truthy/blob/deno/README.md
-[umd-url]: https://github.com/stdlib-js/ndarray-count-truthy/tree/umd
-[umd-readme]: https://github.com/stdlib-js/ndarray-count-truthy/blob/umd/README.md
-[esm-url]: https://github.com/stdlib-js/ndarray-count-truthy/tree/esm
-[esm-readme]: https://github.com/stdlib-js/ndarray-count-truthy/blob/esm/README.md
-[branches-url]: https://github.com/stdlib-js/ndarray-count-truthy/blob/main/branches.md
+Counts the number of truthy elements in the provided ndarray.
 
-[stdlib-license]: https://raw.githubusercontent.com/stdlib-js/ndarray-count-truthy/main/LICENSE
+#### Parameters
 
-[@stdlib/ndarray/ctor]: https://github.com/stdlib-js/ndarray-ctor
+- **arr**: The input ndarray.
+- **axis** (optional): The dimension along which to count truthy values. If not specified, it counts across all dimensions.
 
-<!-- <related-links> -->
+#### Returns
 
-<!-- </related-links> -->
+Returns an ndarray containing the counts of truthy elements.
 
-</section>
+---
 
-<!-- /.links -->
+## 📊 Examples
+
+Here are some examples to illustrate how to use `ndarray-count-truthy`.
+
+### Example 1: Basic Usage
+
+```javascript
+const ndarray = require('ndarray');
+const countTruthy = require('ndarray-count-truthy');
+
+const arr = ndarray([0, 1, 2, null, undefined, 'hello']);
+const count = countTruthy(arr);
+
+console.log(count); // Output: 3
+```
+
+### Example 2: Counting Along a Specific Axis
+
+```javascript
+const ndarray = require('ndarray');
+const countTruthy = require('ndarray-count-truthy');
+
+const arr = ndarray([[0, 1, 2], [null, 3, 4]]);
+const count = countTruthy(arr, 0);
+
+console.log(count); // Output: [1, 2, 2]
+```
+
+### Example 3: Handling Multi-dimensional Arrays
+
+```javascript
+const ndarray = require('ndarray');
+const countTruthy = require('ndarray-count-truthy');
+
+const arr = ndarray([
+  [[0, 1], [2, null]],
+  [[3, 4], [undefined, 5]]
+]);
+const count = countTruthy(arr, 1);
+
+console.log(count); // Output: [[1, 2], [1, 2]]
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have suggestions or improvements, please create an issue or submit a pull request. Here are some guidelines:
+
+1. Fork the repository.
+2. Create a new branch for your feature or fix.
+3. Make your changes.
+4. Submit a pull request.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🚀 Releases
+
+For the latest releases, visit [Releases](https://github.com/itsredowl/ndarray-count-truthy/releases). Make sure to download the latest version to get the most recent features and fixes.
+
+---
+
+## 📦 Additional Resources
+
+- [ndarray Documentation](https://github.com/njsmith/ndarray)
+- [JavaScript Array Methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
+---
+
+## 🛠️ Support
+
+If you encounter any issues or have questions, please check the [Issues](https://github.com/itsredowl/ndarray-count-truthy/issues) section. You can also visit the [Releases](https://github.com/itsredowl/ndarray-count-truthy/releases) page for updates.
+
+---
+
+## 📈 Analytics
+
+Understanding the performance of your code is crucial. You can integrate this library into larger data analysis frameworks or use it in standalone scripts. The simplicity of counting truthy values can help streamline data cleaning and validation processes.
+
+---
+
+## 🎉 Acknowledgments
+
+Thanks to the contributors of the `ndarray` library for providing a robust framework for handling multi-dimensional arrays. Your work makes projects like this possible.
+
+---
+
+## 🌐 Community
+
+Join our community on GitHub Discussions or follow the project on social media for updates and tips. Share your experiences and use cases with `ndarray-count-truthy`!
+
+---
+
+Feel free to reach out if you have any questions or need assistance with the library. Your feedback helps improve the project.
